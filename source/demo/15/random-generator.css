@@ -1,0 +1,108 @@
+.board {
+  display: flex;
+  flex-direction: column;
+}
+
+.board > div {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: row;
+  position: relative;
+  left: 0;
+  top: 0;
+}
+
+.board > div > span {
+  display: none;
+}
+
+.board label {
+  flex-grow: 1;
+  height: 100%;
+}
+
+[name="c01"]:checked ~ .board > #t01 { display: none; }
+[name="c02"]:checked ~ .board > #t02 { display: none; }
+[name="c03"]:checked ~ .board > #t03 { display: none; }
+[name="c04"]:checked ~ .board > #t04 { display: none; }
+[name="c05"]:checked ~ .board > #t05 { display: none; }
+[name="c06"]:checked ~ .board > #t06 { display: none; }
+[name="c07"]:checked ~ .board > #t07 { display: none; }
+[name="c08"]:checked ~ .board > #t08 { display: none; }
+[name="c09"]:checked ~ .board > #t09 { display: none; }
+[name="c10"]:checked ~ .board > #t10 { display: none; }
+[name="c11"]:checked ~ .board > #t11 { display: none; }
+[name="c12"]:checked ~ .board > #t12 { display: none; }
+[name="c13"]:checked ~ .board > #t13 { display: none; }
+[name="c14"]:checked ~ .board > #t14 { display: none; }
+[name="c15"]:checked ~ .board > #t15 { display: none; }
+
+input.y1.x1:checked ~ .board .y1.x1 { display: none; }
+input.y1.x2:checked ~ .board .y1.x2 { display: none; }
+input.y1.x3:checked ~ .board .y1.x3 { display: none; }
+input.y1.x4:checked ~ .board .y1.x4 { display: none; }
+input.y2.x1:checked ~ .board .y2.x1 { display: none; }
+input.y2.x2:checked ~ .board .y2.x2 { display: none; }
+input.y2.x3:checked ~ .board .y2.x3 { display: none; }
+input.y2.x4:checked ~ .board .y2.x4 { display: none; }
+input.y3.x1:checked ~ .board .y3.x1 { display: none; }
+input.y3.x2:checked ~ .board .y3.x2 { display: none; }
+input.y3.x3:checked ~ .board .y3.x3 { display: none; }
+input.y3.x4:checked ~ .board .y3.x4 { display: none; }
+input.y4.x1:checked ~ .board .y4.x1 { display: none; }
+input.y4.x2:checked ~ .board .y4.x2 { display: none; }
+input.y4.x3:checked ~ .board .y4.x3 { display: none; }
+input.y4.x4:checked ~ .board .y4.x4 { display: none; }
+
+
+[name="c01"]:checked ~ 
+[name="c02"]:checked ~ 
+[name="c03"]:checked ~ 
+[name="c04"]:checked ~ 
+[name="c05"]:checked ~ 
+[name="c06"]:checked ~ 
+[name="c07"]:checked ~ 
+[name="c08"]:checked ~ 
+[name="c09"]:checked ~ 
+[name="c10"]:checked ~ 
+[name="c11"]:checked ~ 
+[name="c12"]:checked ~ 
+[name="c13"]:checked ~ 
+[name="c14"]:checked ~ 
+[name="c15"]:checked ~ .board > div { 
+  display: flex !important; position: absolute; width: 1em; height: 1em;
+  left: calc((var(--x) - 1) * 1em);
+  top: calc((var(--y) - 1) * 1em);
+}
+
+[name="c01"]:checked ~ 
+[name="c02"]:checked ~ 
+[name="c03"]:checked ~ 
+[name="c04"]:checked ~ 
+[name="c05"]:checked ~ 
+[name="c06"]:checked ~ 
+[name="c07"]:checked ~ 
+[name="c08"]:checked ~ 
+[name="c09"]:checked ~ 
+[name="c10"]:checked ~ 
+[name="c11"]:checked ~ 
+[name="c12"]:checked ~ 
+[name="c13"]:checked ~ 
+[name="c14"]:checked ~ 
+[name="c15"]:checked ~ .board > div > label { display: block; position: absolute; width: 1em; height: 1em;}
+
+[name="c01"]:checked ~ 
+[name="c02"]:checked ~ 
+[name="c03"]:checked ~ 
+[name="c04"]:checked ~ 
+[name="c05"]:checked ~ 
+[name="c06"]:checked ~ 
+[name="c07"]:checked ~ 
+[name="c08"]:checked ~ 
+[name="c09"]:checked ~ 
+[name="c10"]:checked ~ 
+[name="c11"]:checked ~ 
+[name="c12"]:checked ~ 
+[name="c13"]:checked ~ 
+[name="c14"]:checked ~ 
+[name="c15"]:checked ~ .board > div > span { display: block;}

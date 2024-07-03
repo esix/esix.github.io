@@ -1,0 +1,82 @@
+
+/* cells positions */
+.board { 
+  --c01-x: 0; --c01-y: 0;
+  --c02-x: 0; --c02-y: 0;
+  --c03-x: 0; --c03-y: 0;
+  --c04-x: 0; --c04-y: 0;
+  --c05-x: 0; --c05-y: 0;
+  --c06-x: 0; --c06-y: 0;
+  --c07-x: 0; --c07-y: 0;
+  --c08-x: 0; --c08-y: 0;
+  --c09-x: 0; --c09-y: 0;
+  --c10-x: 0; --c10-y: 0;
+  --c11-x: 0; --c11-y: 0;
+  --c12-x: 0; --c12-y: 0;
+  --c13-x: 0; --c13-y: 0;
+  --c14-x: 0; --c14-y: 0;
+  --c15-x: 0; --c15-y: 0;
+}
+
+.c01.x1:checked ~ .board { --c01-x: 1; } .c01.x2:checked ~ .board { --c01-x: 2; } .c01.x3:checked ~ .board { --c01-x: 3; } .c01.x4:checked ~ .board { --c01-x: 4; } 
+.c01.y1:checked ~ .board { --c01-y: 1; } .c01.y2:checked ~ .board { --c01-y: 2; } .c01.y3:checked ~ .board { --c01-y: 3; } .c01.y4:checked ~ .board { --c01-y: 4; }
+
+.c02.x1:checked ~ .board { --c02-x: 1; } .c02.x2:checked ~ .board { --c02-x: 2; } .c02.x3:checked ~ .board { --c02-x: 3; } .c02.x4:checked ~ .board { --c02-x: 4; } 
+.c02.y1:checked ~ .board { --c02-y: 1; } .c02.y2:checked ~ .board { --c02-y: 2; } .c02.y3:checked ~ .board { --c02-y: 3; } .c02.y4:checked ~ .board { --c02-y: 4; }
+
+.c03.x1:checked ~ .board { --c03-x: 1; } .c03.x2:checked ~ .board { --c03-x: 2; } .c03.x3:checked ~ .board { --c03-x: 3; } .c03.x4:checked ~ .board { --c03-x: 4; } 
+.c03.y1:checked ~ .board { --c03-y: 1; } .c03.y2:checked ~ .board { --c03-y: 2; } .c03.y3:checked ~ .board { --c03-y: 3; } .c03.y4:checked ~ .board { --c03-y: 4; }
+
+.c04.x1:checked ~ .board { --c04-x: 1; } .c04.x2:checked ~ .board { --c04-x: 2; } .c04.x3:checked ~ .board { --c04-x: 3; } .c04.x4:checked ~ .board { --c04-x: 4; } 
+.c04.y1:checked ~ .board { --c04-y: 1; } .c04.y2:checked ~ .board { --c04-y: 2; } .c04.y3:checked ~ .board { --c04-y: 3; } .c04.y4:checked ~ .board { --c04-y: 4; }
+
+.c05.x1:checked ~ .board { --c05-x: 1; } .c05.x2:checked ~ .board { --c05-x: 2; } .c05.x3:checked ~ .board { --c05-x: 3; } .c05.x4:checked ~ .board { --c05-x: 4; } 
+.c05.y1:checked ~ .board { --c05-y: 1; } .c05.y2:checked ~ .board { --c05-y: 2; } .c05.y3:checked ~ .board { --c05-y: 3; } .c05.y4:checked ~ .board { --c05-y: 4; }
+
+.c06.x1:checked ~ .board { --c06-x: 1; } .c06.x2:checked ~ .board { --c06-x: 2; } .c06.x3:checked ~ .board { --c06-x: 3; } .c06.x4:checked ~ .board { --c06-x: 4; } 
+.c06.y1:checked ~ .board { --c06-y: 1; } .c06.y2:checked ~ .board { --c06-y: 2; } .c06.y3:checked ~ .board { --c06-y: 3; } .c06.y4:checked ~ .board { --c06-y: 4; }
+
+.c07.x1:checked ~ .board { --c07-x: 1; } .c07.x2:checked ~ .board { --c07-x: 2; } .c07.x3:checked ~ .board { --c07-x: 3; } .c07.x4:checked ~ .board { --c07-x: 4; } 
+.c07.y1:checked ~ .board { --c07-y: 1; } .c07.y2:checked ~ .board { --c07-y: 2; } .c07.y3:checked ~ .board { --c07-y: 3; } .c07.y4:checked ~ .board { --c07-y: 4; }
+
+.c08.x1:checked ~ .board { --c08-x: 1; } .c08.x2:checked ~ .board { --c08-x: 2; } .c08.x3:checked ~ .board { --c08-x: 3; } .c08.x4:checked ~ .board { --c08-x: 4; } 
+.c08.y1:checked ~ .board { --c08-y: 1; } .c08.y2:checked ~ .board { --c08-y: 2; } .c08.y3:checked ~ .board { --c08-y: 3; } .c08.y4:checked ~ .board { --c08-y: 4; }
+
+.c09.x1:checked ~ .board { --c09-x: 1; } .c09.x2:checked ~ .board { --c09-x: 2; } .c09.x3:checked ~ .board { --c09-x: 3; } .c09.x4:checked ~ .board { --c09-x: 4; } 
+.c09.y1:checked ~ .board { --c09-y: 1; } .c09.y2:checked ~ .board { --c09-y: 2; } .c09.y3:checked ~ .board { --c09-y: 3; } .c09.y4:checked ~ .board { --c09-y: 4; }
+
+.c10.x1:checked ~ .board { --c10-x: 1; } .c10.x2:checked ~ .board { --c10-x: 2; } .c10.x3:checked ~ .board { --c10-x: 3; } .c10.x4:checked ~ .board { --c10-x: 4; } 
+.c10.y1:checked ~ .board { --c10-y: 1; } .c10.y2:checked ~ .board { --c10-y: 2; } .c10.y3:checked ~ .board { --c10-y: 3; } .c10.y4:checked ~ .board { --c10-y: 4; }
+
+.c11.x1:checked ~ .board { --c11-x: 1; } .c11.x2:checked ~ .board { --c11-x: 2; } .c11.x3:checked ~ .board { --c11-x: 3; } .c11.x4:checked ~ .board { --c11-x: 4; } 
+.c11.y1:checked ~ .board { --c11-y: 1; } .c11.y2:checked ~ .board { --c11-y: 2; } .c11.y3:checked ~ .board { --c11-y: 3; } .c11.y4:checked ~ .board { --c11-y: 4; }
+
+.c12.x1:checked ~ .board { --c12-x: 1; } .c12.x2:checked ~ .board { --c12-x: 2; } .c12.x3:checked ~ .board { --c12-x: 3; } .c12.x4:checked ~ .board { --c12-x: 4; } 
+.c12.y1:checked ~ .board { --c12-y: 1; } .c12.y2:checked ~ .board { --c12-y: 2; } .c12.y3:checked ~ .board { --c12-y: 3; } .c12.y4:checked ~ .board { --c12-y: 4; }
+
+.c13.x1:checked ~ .board { --c13-x: 1; } .c13.x2:checked ~ .board { --c13-x: 2; } .c13.x3:checked ~ .board { --c13-x: 3; } .c13.x4:checked ~ .board { --c13-x: 4; } 
+.c13.y1:checked ~ .board { --c13-y: 1; } .c13.y2:checked ~ .board { --c13-y: 2; } .c13.y3:checked ~ .board { --c13-y: 3; } .c13.y4:checked ~ .board { --c13-y: 4; }
+
+.c14.x1:checked ~ .board { --c14-x: 1; } .c14.x2:checked ~ .board { --c14-x: 2; } .c14.x3:checked ~ .board { --c14-x: 3; } .c14.x4:checked ~ .board { --c14-x: 4; } 
+.c14.y1:checked ~ .board { --c14-y: 1; } .c14.y2:checked ~ .board { --c14-y: 2; } .c14.y3:checked ~ .board { --c14-y: 3; } .c14.y4:checked ~ .board { --c14-y: 4; }
+
+.c15.x1:checked ~ .board { --c15-x: 1; } .c15.x2:checked ~ .board { --c15-x: 2; } .c15.x3:checked ~ .board { --c15-x: 3; } .c15.x4:checked ~ .board { --c15-x: 4; } 
+.c15.y1:checked ~ .board { --c15-y: 1; } .c15.y2:checked ~ .board { --c15-y: 2; } .c15.y3:checked ~ .board { --c15-y: 3; } .c15.y4:checked ~ .board { --c15-y: 4; }
+
+
+#t01 { --x: var(--c01-x); --y: var(--c01-y); }
+#t02 { --x: var(--c02-x); --y: var(--c02-y); }
+#t03 { --x: var(--c03-x); --y: var(--c03-y); }
+#t04 { --x: var(--c04-x); --y: var(--c04-y); }
+#t05 { --x: var(--c05-x); --y: var(--c05-y); }
+#t06 { --x: var(--c06-x); --y: var(--c06-y); }
+#t07 { --x: var(--c07-x); --y: var(--c07-y); }
+#t08 { --x: var(--c08-x); --y: var(--c08-y); }
+#t09 { --x: var(--c09-x); --y: var(--c09-y); }
+#t10 { --x: var(--c10-x); --y: var(--c10-y); }
+#t11 { --x: var(--c11-x); --y: var(--c11-y); }
+#t12 { --x: var(--c12-x); --y: var(--c12-y); }
+#t13 { --x: var(--c13-x); --y: var(--c13-y); }
+#t14 { --x: var(--c14-x); --y: var(--c14-y); }
+#t15 { --x: var(--c15-x); --y: var(--c15-y); }
+
