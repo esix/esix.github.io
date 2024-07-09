@@ -3,9 +3,9 @@
       - var(--c04-x) - var(--c05-x) - var(--c06-x) - var(--c07-x)
       - var(--c08-x) - var(--c09-x) - var(--c10-x) - var(--c11-x)
       - var(--c12-x) - var(--c13-x) - var(--c14-x) - var(--c15-x) );
-  --free-y: calc( 40 - var(--c01-y) - var(--c02-y) - var(--c03-y) 
-      - var(--c04-y) - var(--c05-y) - var(--c06-y) - var(--c07-y) 
-      - var(--c08-y) - var(--c09-y) - var(--c10-y) - var(--c11-y) 
+  --free-y: calc( 40 - var(--c01-y) - var(--c02-y) - var(--c03-y)
+      - var(--c04-y) - var(--c05-y) - var(--c06-y) - var(--c07-y)
+      - var(--c08-y) - var(--c09-y) - var(--c10-y) - var(--c11-y)
       - var(--c12-y) - var(--c13-y) - var(--c14-y) - var(--c15-y) );
 }
 
@@ -14,7 +14,6 @@
 
 
 .board > div {
-
   --dx: calc(var(--x) - var(--free-x));
   --dy: calc(var(--y) - var(--free-y));
   --sq-diff: calc(10 * var(--dx) * var(--dx) + 10 * var(--dy) * var(--dy) - 10);

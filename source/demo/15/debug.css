@@ -20,10 +20,29 @@
 #debug:target ~ #set-debug { display: none;}
 #debug:target ~ #unset-debug { display: block;}
 
-input[type="radio"] { display: none; cursor: pointer}
-br { display: none; }
-#debug:target ~ input[type="radio"] { display: inline; }
-#debug:target ~ br { display: inline; }
+.c { display: none; cursor: pointer;  position: absolute; right: 0; --top-offset: 5rem; font-size: 14px;}
+.c.c01 {top: calc(var(--top-offset) + 1em);}
+.c.c02 {top: calc(var(--top-offset) + 2em);}
+.c.c03 {top: calc(var(--top-offset) + 3em);}
+.c.c04 {top: calc(var(--top-offset) + 4em);}
+.c.c05 {top: calc(var(--top-offset) + 5em);}
+.c.c06 {top: calc(var(--top-offset) + 6em);}
+.c.c07 {top: calc(var(--top-offset) + 7em);}
+.c.c08 {top: calc(var(--top-offset) + 8em);}
+.c.c09 {top: calc(var(--top-offset) + 9em);}
+.c.c10 {top: calc(var(--top-offset) + 10em);}
+.c.c11 {top: calc(var(--top-offset) + 11em);}
+.c.c12 {top: calc(var(--top-offset) + 12em);}
+.c.c13 {top: calc(var(--top-offset) + 13em);}
+.c.c14 {top: calc(var(--top-offset) + 14em);}
+.c.c15 {top: calc(var(--top-offset) + 15em);}
+.c.y1 {right: 16rem;} .c.x1 {transform: translate(105%, 0);}
+.c.y2 {right: 12rem;} .c.x2 {transform: translate(210%, 0);}
+.c.y3 {right: 8rem;} .c.x3 {transform: translate(315%, 0);}
+.c.y4 {right: 4rem; } .c.x4 {transform: translate(420%, 0);}
+
+
+#debug:target ~ .c { display: inline;}
 
 
 #debug:before {
