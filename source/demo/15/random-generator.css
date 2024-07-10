@@ -3,7 +3,8 @@
   flex-direction: column;
 }
 
-.board > div {
+/* tile in random generator mode */
+.t {
   display: flex;
   flex-grow: 1;
   flex-direction: row;
@@ -12,7 +13,8 @@
   top: 0;
 }
 
-.board > div > span {
+/* no text on tile */
+.t > span {
   display: none;
 }
 
@@ -55,54 +57,54 @@ input.y4.x3:checked ~ .board .y4.x3 { display: none; }
 input.y4.x4:checked ~ .board .y4.x4 { display: none; }
 
 
-[name="c01"]:checked ~ 
-[name="c02"]:checked ~ 
-[name="c03"]:checked ~ 
-[name="c04"]:checked ~ 
-[name="c05"]:checked ~ 
-[name="c06"]:checked ~ 
-[name="c07"]:checked ~ 
-[name="c08"]:checked ~ 
-[name="c09"]:checked ~ 
-[name="c10"]:checked ~ 
-[name="c11"]:checked ~ 
-[name="c12"]:checked ~ 
-[name="c13"]:checked ~ 
-[name="c14"]:checked ~ 
-[name="c15"]:checked ~ .board > div { 
+[name="c01"]:checked ~
+[name="c02"]:checked ~
+[name="c03"]:checked ~
+[name="c04"]:checked ~
+[name="c05"]:checked ~
+[name="c06"]:checked ~
+[name="c07"]:checked ~
+[name="c08"]:checked ~
+[name="c09"]:checked ~
+[name="c10"]:checked ~
+[name="c11"]:checked ~
+[name="c12"]:checked ~
+[name="c13"]:checked ~
+[name="c14"]:checked ~
+[name="c15"]:checked ~ .board > .t {
   display: flex !important; position: absolute; width: 1em; height: 1em;
   left: calc((var(--x) - 1) * 1em);
   top: calc((var(--y) - 1) * 1em);
 }
 
-[name="c01"]:checked ~ 
-[name="c02"]:checked ~ 
-[name="c03"]:checked ~ 
-[name="c04"]:checked ~ 
-[name="c05"]:checked ~ 
-[name="c06"]:checked ~ 
-[name="c07"]:checked ~ 
-[name="c08"]:checked ~ 
-[name="c09"]:checked ~ 
-[name="c10"]:checked ~ 
-[name="c11"]:checked ~ 
-[name="c12"]:checked ~ 
-[name="c13"]:checked ~ 
-[name="c14"]:checked ~ 
-[name="c15"]:checked ~ .board > div > label { display: block; position: absolute; width: 1em; height: 1em;}
+[name="c01"]:checked ~
+[name="c02"]:checked ~
+[name="c03"]:checked ~
+[name="c04"]:checked ~
+[name="c05"]:checked ~
+[name="c06"]:checked ~
+[name="c07"]:checked ~
+[name="c08"]:checked ~
+[name="c09"]:checked ~
+[name="c10"]:checked ~
+[name="c11"]:checked ~
+[name="c12"]:checked ~
+[name="c13"]:checked ~
+[name="c14"]:checked ~
+[name="c15"]:checked ~ .board > .t > label { display: block; position: absolute; width: 1em; height: 1em;}
 
-[name="c01"]:checked ~ 
-[name="c02"]:checked ~ 
-[name="c03"]:checked ~ 
-[name="c04"]:checked ~ 
-[name="c05"]:checked ~ 
-[name="c06"]:checked ~ 
-[name="c07"]:checked ~ 
-[name="c08"]:checked ~ 
-[name="c09"]:checked ~ 
-[name="c10"]:checked ~ 
-[name="c11"]:checked ~ 
-[name="c12"]:checked ~ 
-[name="c13"]:checked ~ 
-[name="c14"]:checked ~ 
-[name="c15"]:checked ~ .board > div > span { display: block;}
+[name="c01"]:checked ~
+[name="c02"]:checked ~
+[name="c03"]:checked ~
+[name="c04"]:checked ~
+[name="c05"]:checked ~
+[name="c06"]:checked ~
+[name="c07"]:checked ~
+[name="c08"]:checked ~
+[name="c09"]:checked ~
+[name="c10"]:checked ~
+[name="c11"]:checked ~
+[name="c12"]:checked ~
+[name="c13"]:checked ~
+[name="c14"]:checked ~
+[name="c15"]:checked ~ .board > .t > span { display: block;}
