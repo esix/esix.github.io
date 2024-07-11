@@ -1,10 +1,17 @@
+:root {
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-size: 16px;
+}
+* {
+  box-sizing: border-box;
+}
 
-
-.board, .random-generator {
+.board {
   position: relative;
-  width: 4em;
-  height: 4em;
-  border: 1px solid red;
+  width: calc(4em + 4px);
+  height: calc(4em + 4px);
+  border: 1px inset #444444;
+  padding: 3px;
   font-size: 64px;
   overflow: hidden;
 }
@@ -36,8 +43,6 @@
 
 .t {
   border: 1px solid #ccc;
-  left: calc((var(--x) - 1) * 1em);         /* позиция вычисляется по значению переменных */
-  top: calc((var(--y) - 1) * 1em);          /* значение 1 соответствует смещению в 0 */
   transition-property: left, top;
   transition-duration: 0.2s;
   display: flex;
@@ -46,6 +51,6 @@
   overflow: hidden;
 }
 
-.t > span { font-size: 0.7em; }
+.t > span { font-size: 0.6em; }
 .t > label { cursor: pointer; }
 
