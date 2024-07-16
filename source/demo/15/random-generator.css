@@ -10,8 +10,8 @@
   content: "Randomizer \A click here";
   font-size: 0.4em;
   position: absolute;
-  left: 50%;
   top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   height: auto;
   width: auto;
@@ -30,6 +30,7 @@
   top: 0;
   border: none;
   background: linear-gradient(rgba(128,128,128,0.2), rgba(128,128,128,0.3), rgba(128,128,128,0.2));
+  user-select: none;
 }
 
 
@@ -91,25 +92,28 @@ input.y4.x4:checked ~ .board .y4.x4 { display: none; }
 [name="c12"]:checked ~
 [name="c13"]:checked ~
 [name="c14"]:checked ~
-[name="c15"]:checked ~ .board > .t { /* tile in play mode */
+[name="c15"]:checked ~ .board > .t {                                                                /* tile in play mode */
   display: flex !important;
-  position: absolute;
-  width: 0.95em;
-  height: 0.95em;
-  left: calc((var(--x) - 1) * 1em + 0.025em); /* позиция вычисляется по значению переменных */
-  top: calc((var(--y) - 1) * 1em + 0.025em); /* значение 1 соответствует смещению в 0 */
-  /*border: 1px solid #444444;*/
-  /*background: #cccccc;*/
-  border-radius: 0.1em;
-  z-index: calc(10 + var(--y));
-
   align-items: center;
-  background-color: #afd275;
-  box-shadow:
-      0.06em 0.06em 0.08em 0 rgba(0, 0, 0, 0.25),
-      -0.04em -0.04em 0.06em 0 rgba(255, 255, 255, 0.3);
-  display: flex;
   justify-content: center;
+  position: absolute;
+  width: calc(1em - 4px);
+  height: calc(1em - 4px);
+  left: calc((var(--x) - 1) * 1em + 2px);                                                           /* evaluated with x and y vars  */
+  top: calc((var(--y) - 1) * 1em + 2px);                                                            /* value 1 gives offset 0 */
+  z-index: calc(10 + var(--y));
+  border: 0;
+  font-size: 1em;
+  transition: all 150ms ease-in-out;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.3rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 70.48%, #FFF 93.62%, rgba(255, 255, 255, 0.00) 100%), linear-gradient(180deg, rgba(30, 54, 87, 0.00) 0%, rgba(30, 54, 87, 0.01) 100%), #FAFAFA;
+  background-image: url('bg1.png');
+  background-size: calc(4em);
+
+  box-shadow: rgba(0, 0, 0, 0.08) 0 0 0 1px, rgba(0, 0, 0, 0.08) 0 -2px 1px 0 inset, rgba(255, 255, 255, 0.5) 0 2px 1px 0 inset, 0 2px 5px -1px rgba(0, 0, 0, 0.05), 0 1px 3px -1px rgba(0, 0, 0, 0.3);
+    text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.12);
 }
 
 [name="c01"]:checked ~
@@ -131,13 +135,17 @@ input.y4.x4:checked ~ .board .y4.x4 { display: none; }
   position: absolute;
   transition-property: left, top;
   transition-duration: 0.2s;
-  background: blue;
-  transform: none;
   top: 0;
-  height: 1px;
+  height: 2px;
   width: 1em;
-  left: 0;
   font-size: 1em;
+  left: calc((var(--free-x) - 1 )* 1em) !important;
+
+  background: blue;
+  filter: blur(3px);
+  transform: none;
+  border-radius: inherit;
+  pointer-events: none;
 }
 
 
