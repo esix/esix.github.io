@@ -13,10 +13,16 @@
 .board:after  {  left: calc((var(--free-x) - 1 )* 1em); }
 
 
-.board > div {
+.board > .t {
   --dx: calc(var(--x) - var(--free-x));
   --dy: calc(var(--y) - var(--free-y));
   --sq-diff: calc(10 * var(--dx) * var(--dx) + 10 * var(--dy) * var(--dy) - 10);
+
+  left: calc((var(--x) - 1) * 1em + 3px);                                                           /* evaluated with x and y vars  */
+  top: calc((var(--y) - 1) * 1em + 3px);                                                            /* value 1 gives offset 0 */
+  width: calc(1em - 4px);
+  height: calc(1em - 4px);
+  z-index: calc(10 + var(--y));
 }
 
 
