@@ -22,6 +22,7 @@
     "hexo-renderer-marked": "^6.3.0",
     "hexo-renderer-stylus": "^3.0.0",
     "hexo-server": "^3.0.0",
+    "hexo-tag-html5video": "^1.0.3",
     "hexo-theme-landscape": "^1.0.0"
   },
   "packageManager": "yarn@4.4.0+sha512.91d93b445d9284e7ed52931369bc89a663414e5582d00eea45c67ddc459a2582919eece27c412d6ffd1bd0793ff35399381cb229326b961798ce4f4cc60ddfdb"
