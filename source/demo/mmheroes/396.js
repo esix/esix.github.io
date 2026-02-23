@@ -1,0 +1,1 @@
+(self.webpackChunkmmheroes=self.webpackChunkmmheroes||[]).push([[396],{396:()=>{}}]);
