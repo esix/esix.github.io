@@ -7,7 +7,8 @@
     "clean": "hexo clean",
     "deploy": "hexo deploy",
     "server": "hexo server",
-    "start": "hexo server --draft"
+    "start": "hexo server --draft",
+    "update-demos": "node update-demos.mjs"
   },
   "hexo": {
     "version": "7.3.0"

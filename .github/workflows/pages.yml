@@ -3,38 +3,92 @@ name: Pages
 on:
   push:
     branches:
-      - master # default branch
+      - master
+  repository_dispatch:
+    types: [demo-updated]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          # If your repository depends on submodule, please see: https://github.com/actions/checkout
-          submodules: recursive
+      - name: Checkout site
+        uses: actions/checkout@v4
+
       - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
-          # Examples: 20, 18.19, >=16.20.2, lts/Iron, lts/Hydrogen, *, latest, current, node
-          # Ref: https://github.com/actions/setup-node#supported-version-syntax
           node-version: "20"
-      - name: Cache NPM dependencies
+
+      - name: Cache site dependencies
         uses: actions/cache@v4
         with:
           path: node_modules
           key: ${{ runner.OS }}-npm-cache
           restore-keys: |
             ${{ runner.OS }}-npm-cache
-      - name: Install Dependencies
+
+      - name: Install site dependencies
         run: npm install
-      - name: Build
+
+      # --- mmheroes ---
+      - name: Checkout mmheroes
+        uses: actions/checkout@v4
+        with:
+          repository: esix/mmheroes
+          path: _demos/mmheroes
+
+      - name: Cache mmheroes dependencies
+        uses: actions/cache@v4
+        with:
+          path: _demos/mmheroes/node_modules
+          key: ${{ runner.OS }}-mmheroes-npm-cache
+          restore-keys: |
+            ${{ runner.OS }}-mmheroes-npm-cache
+
+      - name: Build mmheroes
+        run: npm install && npm run build
+        working-directory: _demos/mmheroes
+
+      - name: Copy mmheroes dist
+        run: |
+          rm -rf source/demo/mmheroes
+          mkdir -p source/demo/mmheroes
+          cp -r _demos/mmheroes/dist/. source/demo/mmheroes/
+
+      # --- ball-to-goal ---
+      - name: Checkout ball-to-goal
+        uses: actions/checkout@v4
+        with:
+          repository: esix/ball-to-goal
+          path: _demos/ball-to-goal
+
+      - name: Cache ball-to-goal dependencies
+        uses: actions/cache@v4
+        with:
+          path: _demos/ball-to-goal/node_modules
+          key: ${{ runner.OS }}-ball-to-goal-npm-cache
+          restore-keys: |
+            ${{ runner.OS }}-ball-to-goal-npm-cache
+
+      - name: Build ball-to-goal
+        run: npm install && npm run build
+        working-directory: _demos/ball-to-goal
+
+      - name: Copy ball-to-goal dist
+        run: |
+          rm -rf source/demo/ball-to-goal
+          mkdir -p source/demo/ball-to-goal
+          cp -r _demos/ball-to-goal/dist/. source/demo/ball-to-goal/
+
+      # --- Hexo build ---
+      - name: Build site
         run: npm run build
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
+
   deploy:
     needs: build
     permissions:
