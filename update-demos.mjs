@@ -17,6 +17,11 @@ const demos = [
     src: resolve(SITE_DIR, '../ball-to-goal'),
     dist: resolve(SITE_DIR, '../ball-to-goal/dist'),
   },
+  {
+    name: 'interactive-computer-graphics',
+    src: resolve(SITE_DIR, '../interactive-computer-graphics'),
+    dist: resolve(SITE_DIR, '../interactive-computer-graphics/dist'),
+  },
 ];
 
 for (const { name, src, dist } of demos) {

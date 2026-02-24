@@ -80,6 +80,31 @@ jobs:
           mkdir -p source/demo/ball-to-goal
           cp -r _demos/ball-to-goal/dist/. source/demo/ball-to-goal/
 
+      # --- interactive-computer-graphics ---
+      - name: Checkout interactive-computer-graphics
+        uses: actions/checkout@v4
+        with:
+          repository: esix/interactive-computer-graphics
+          path: _demos/interactive-computer-graphics
+
+      - name: Cache interactive-computer-graphics dependencies
+        uses: actions/cache@v4
+        with:
+          path: _demos/interactive-computer-graphics/node_modules
+          key: ${{ runner.OS }}-interactive-computer-graphics-npm-cache
+          restore-keys: |
+            ${{ runner.OS }}-interactive-computer-graphics-npm-cache
+
+      - name: Build interactive-computer-graphics
+        run: npm install && npm run build
+        working-directory: _demos/interactive-computer-graphics
+
+      - name: Copy interactive-computer-graphics dist
+        run: |
+          rm -rf source/demo/interactive-computer-graphics
+          mkdir -p source/demo/interactive-computer-graphics
+          cp -r _demos/interactive-computer-graphics/dist/. source/demo/interactive-computer-graphics/
+
       # --- Hexo build ---
       - name: Build site
         run: npm run build

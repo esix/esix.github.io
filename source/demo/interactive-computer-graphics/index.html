@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Computer Graphics</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #111;
+      color: #eee;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 24px;
+    }
+    h1 { font-size: 28px; margin-bottom: 8px; }
+    p.subtitle { color: #888; margin-bottom: 40px; }
+    .projects {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      max-width: 800px;
+    }
+    .card {
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 28px 32px;
+      width: 260px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .card:hover { background: #252525; border-color: #555; }
+    .card h2 { font-size: 18px; margin-bottom: 8px; }
+    .card p { font-size: 13px; color: #999; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <h1>Interactive Computer Graphics</h1>
+  <p class="subtitle">Research prototypes and demos</p>
+  <div class="projects">
+    <a class="card" href="/ninja_cursors/">
+      <h2>Ninja Cursors</h2>
+      <p>Multiple virtual cursors controlled by a single physical mouse, with several selection strategies.</p>
+    </a>
+    <a class="card" href="/autozoom/">
+      <h2>Autozoom</h2>
+      <p>Drag to pan a fractal tiling. Speed-dependent autozoom snaps detail back into focus on release.</p>
+    </a>
+    <a class="card" href="/bubble/">
+      <h2>Bubble</h2>
+      <p>Yellow boxes cluster into metaball bubbles. Drag individual boxes or whole clusters. Double-click to spread.</p>
+    </a>
+  </div>
+</body>
+</html>
