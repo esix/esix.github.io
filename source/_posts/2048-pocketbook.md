@@ -1,11 +1,11 @@
 ---
 title: 2048 для PocketBook
-date: 2026-03-07
+date: 2024-11-05
 layout: post
 tags:
   - gamedev
   - pocketbook
-  - c
+  - C
   - e-ink
 ---
 
@@ -13,7 +13,7 @@ tags:
 
 - [Репозиторий](https://github.com/esix/2048-pocketbook)
 
-![2048 на устройстве](2048-pocketbook/running-on-device.png)
+![2048 на устройстве](running-on-device.png)
 
 <!--more-->
 
