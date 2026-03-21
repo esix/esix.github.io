@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PACKMAN2 — JS Port</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; height: 100%;
+      background: #000;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    #game-canvas {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      cursor: none;
+    }
+    #ui {
+      position: fixed; bottom: 8px; right: 12px;
+      display: flex; gap: 8px; align-items: center;
+    }
+    #ui button {
+      background: #222; color: #aaa; border: 1px solid #555;
+      padding: 4px 10px; font-family: monospace; font-size: 12px;
+      cursor: pointer;
+    }
+    #ui button:hover:not(:disabled) { background: #333; color: #fff; }
+    #ui button:disabled { color: #555; border-color: #333; cursor: default; }
+    #ui select {
+      background: #222; color: #aaa; border: 1px solid #555;
+      padding: 4px; font-family: monospace; font-size: 12px;
+    }
+    #ui label { color: #888; font-family: monospace; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <canvas id="game-canvas" width="320" height="200"></canvas>
+  <div id="ui">
+    <label>Palette:</label>
+    <select id="palette-sel">
+      <option value="0">CGA C0 (green)</option>
+      <option value="1">CGA C1 (cyan/magenta)</option>
+      <option value="2" selected>CGA C2 (bright green)</option>
+      <option value="3">CGA C3 (bright cyan)</option>
+    </select>
+    <button id="mute-btn">🔈 Mute</button>
+    <span style="color:#555">|</span>
+    <button id="cheat-lives">+1 Life</button>
+    <label style="color:#aaa;font-size:12px">Enemy speed:</label>
+    <button id="cheat-speed-down">-</button>
+    <button id="cheat-speed-up" disabled>+</button>
+    <button id="cheat-skip">Skip Level</button>
+    <span style="color:#555">|</span>
+    <button id="help-btn">? Help</button>
+  </div>
+
+  <!-- load order matters -->
+  <script src="src/data.js"></script>
+  <script src="src/input.js"></script>
+  <script src="src/sound.js"></script>
+  <script src="src/renderer.js"></script>
+  <script src="src/game.js"></script>
+
+  <script>
+    // Scale canvas to fill window while preserving 320x200 aspect ratio
+    const canvas = document.getElementById('game-canvas');
+    function resize() {
+      const scaleX = Math.floor(window.innerWidth  / 320);
+      const scaleY = Math.floor(window.innerHeight / 200);
+      const scale  = Math.max(1, Math.min(scaleX, scaleY));
+      canvas.style.width  = (320 * scale) + 'px';
+      canvas.style.height = (200 * scale) + 'px';
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Palette selector
+    document.getElementById('palette-sel').addEventListener('change', e => {
+      if (window.renderer) renderer.setPalette(+e.target.value);
+    });
+
+    // Mute toggle (persisted in localStorage)
+    let muted = localStorage.getItem('packman2_muted') === '1';
+    function applyMute() {
+      if (window.sound) sound.setMuted(muted);
+      if (window._game) window._game.soundOn = !muted;
+      document.getElementById('mute-btn').textContent = muted ? '🔇 Unmute' : '🔈 Mute';
+    }
+    applyMute();
+    document.getElementById('mute-btn').addEventListener('click', () => {
+      muted = !muted;
+      localStorage.setItem('packman2_muted', muted ? '1' : '0');
+      applyMute();
+    });
+
+    // Help overlay
+    document.getElementById('help-btn').addEventListener('click', () => {
+      alert(
+        'PACKMAN2 — Kiev\'90 Free Masters\n\n' +
+        'Arrow Keys / WASD  : Move Pacman\n' +
+        'Space / Enter      : Start game\n' +
+        '0\u20139               : Speed (0=fastest, 9=slowest)\n' +
+        'F1 / F2            : Sound OFF / ON\n' +
+        'ESC                : Exit to menu\n' +
+        'S (menu)           : Save game\n' +
+        'L (menu)           : Load game\n\n' +
+        'Collect all dots to clear the level.\n' +
+        'Enemies kill on contact — no power-ups!\n' +
+        'Extra lives at 600, 1200, 2000, 2600 pts.\n' +
+        '15 levels, 5 starting lives, score +2 per dot.'
+      );
+    });
+
+    // Cheat buttons
+    document.getElementById('cheat-lives').addEventListener('click', () => {
+      if (window._game) { window._game.lives++; }
+    });
+    function updateSlowBtns() {
+      const bonus = window._game ? (window._game._enemySlowBonus || 0) : 0;
+      document.getElementById('cheat-speed-up').disabled = bonus <= 0;
+    }
+    function applySlowBonus(delta) {
+      if (!window._game) return;
+      const g = window._game;
+      g._enemySlowBonus = Math.max(0, (g._enemySlowBonus || 0) + delta);
+      for (const e of g.enemies) {
+        e.xTarget = Math.max(1, e.xTarget + delta);
+        e.yTarget = Math.max(1, e.yTarget + delta);
+      }
+      updateSlowBtns();
+    }
+    document.getElementById('cheat-speed-down').addEventListener('click', () => applySlowBonus(1));
+    document.getElementById('cheat-speed-up').addEventListener('click', () => applySlowBonus(-1));
+    document.getElementById('cheat-skip').addEventListener('click', () => {
+      if (!window._game) return;
+      const g = window._game;
+      if (g.state === 'PLAYING' || g.state === 'MENU' || g.state === 'LEVEL_COMPLETE') {
+        g.levelIdx = (g.levelIdx + 1) % N_LEVELS;
+        g._initLevel();
+        g._setState('PLAYING');
+      }
+    });
+
+    // Boot the game once everything is defined
+    window.addEventListener('load', () => {
+      if (typeof Game === 'undefined') {
+        console.error('Game class not loaded');
+        return;
+      }
+      const game = new Game(canvas);
+      window._game = game;
+      applyMute();
+      game.start();
+    });
+  </script>
+</body>
+</html>
