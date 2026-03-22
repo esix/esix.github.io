@@ -313,6 +313,11 @@ class Game {
       const freq = 1193181 / (600 + 150 * Math.sin(this.stateTimer * 0.05));
       sound.eatDot();  // approximate the sweep with short beeps
     }
+    // Ignore input for first 120 frames (~2s) so mobile taps don't skip the screen
+    if (this.stateTimer < 120) {
+      input.wasPressed('Space'); input.wasPressed('Enter'); input.wasPressed('Escape');
+      return;
+    }
     if (input.wasPressed('Space') || input.wasPressed('Enter') || input.wasPressed('Escape')) {
       if (this.score > this.hiScore) {
         this.hiScore = this.score;
@@ -327,6 +332,11 @@ class Game {
   // ASM: game over waits for any keypress (fn0800_0ADF calls fn0800_044C)
   _updateGameOver() {
     this.stateTimer++;
+    // Ignore input for first 120 frames (~2s) so mobile taps don't skip the screen
+    if (this.stateTimer < 120) {
+      input.wasPressed('Space'); input.wasPressed('Enter'); input.wasPressed('Escape');
+      return;
+    }
     if (input.wasPressed('Space') || input.wasPressed('Enter') || input.wasPressed('Escape')) {
       this._setState(S_MENU);
     }
@@ -466,22 +476,30 @@ class Game {
     }
 
     // Direction change from keyboard (ASM: cmp [si+0Ah], [0x927A])
+    // Turn buffering: only apply the turn if the new direction is walkable.
+    // If not walkable, keep going in current direction and retry next tile boundary.
     if (this.inputDir !== DIR_NONE && this.inputDir !== pac.dir) {
-      pac.dir = this.inputDir;
+      const turnAhead = tileAhead(this.maze, pac.x, pac.y, this.inputDir);
+      if (turnAhead < 0 || WALKABLE.has(turnAhead)) {
+        // Turn direction is walkable (or tunnel) — apply it
+        pac.dir = this.inputDir;
 
-      // Update sprite frames for new direction (ASM: fn0800_128C with direction-specific sprite addr)
-      if (PAC_SPRITES[pac.dir]) {
-        pac.spriteFrames = PAC_SPRITES[pac.dir];
-        pac.spriteIdx = 0;
+        // Update sprite frames for new direction
+        if (PAC_SPRITES[pac.dir]) {
+          pac.spriteFrames = PAC_SPRITES[pac.dir];
+          pac.spriteIdx = 0;
+        }
       }
+      // else: wall in turn direction — keep pac.dir, keep inputDir buffered for retry
     }
 
-    // Check if next tile is walkable (ASM: call fn0800_1076)
+    // Check if next tile in CURRENT direction is walkable (ASM: call fn0800_1076)
     if (pac.dir !== DIR_NONE) {
       const ahead = tileAhead(this.maze, pac.x, pac.y, pac.dir);
       if (ahead >= 0 && !WALKABLE.has(ahead)) {
         pac.dir = DIR_NONE;      // stop (ASM: mov [si+0Ah], 0)
-        this.inputDir = DIR_NONE; // ASM: mov [0x927A], 0
+        // Don't clear inputDir — keep buffered turn for when Pacman reaches
+        // a tile boundary where the desired direction IS walkable
       }
     }
   }
