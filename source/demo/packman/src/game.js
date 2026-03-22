@@ -1,5 +1,5 @@
 // src/game.js — main game logic
-// Faithful port of PACKMAN2.EXE (Kiev'90 Free Masters)
+// Faithful port of PACKMAN.EXE (Kiev'90 Free Masters)
 // Based on ASM analysis of fn0800_0BDC, fn0800_111E, fn0800_128C,
 // fn0800_12B7 (Pacman update), fn0800_13EE (collision), fn0800_0F63 (movement),
 // fn0800_10F8/fn0800_1096 (enemy AI), fn0800_0A2F (keyboard handler).
@@ -156,15 +156,16 @@ class Game {
     window.renderer = this.renderer;
 
     this.state     = S_MENU;
-    this.speed     = 5;        // default speed (0=fastest, 9=slowest)
+    const touch    = window.matchMedia('(pointer: coarse)').matches;
+    this.speed     = touch ? 2 : 5;  // default speed (0=fastest, 9=slowest); faster on mobile
     this.score     = 0;
-    this.hiScore   = +localStorage.getItem('packman2_hi') || 0;
+    this.hiScore   = +localStorage.getItem('packman_hi') || 0;
     this.lives     = STARTING_LIVES;
     this.levelIdx  = 0;
     this.tick      = 0;
     this.updateCounter = 0;
     this.stateTimer    = 0;
-    this.soundOn       = localStorage.getItem('packman2_muted') !== '1';
+    this.soundOn       = localStorage.getItem('packman_muted') !== '1';
 
     this.maze      = null;
     this.dotsTotal = 0;        // total eatable tiles in level
@@ -221,8 +222,8 @@ class Game {
     if (input.wasPressed('KeyS')) { this._save(); return; }
     if (input.wasPressed('KeyL')) { this._load(); return; }
     // F1/F2 sound toggle
-    if (input.wasPressed('F1')) { this.soundOn = false; localStorage.setItem('packman2_muted', '1'); }
-    if (input.wasPressed('F2')) { this.soundOn = true; localStorage.setItem('packman2_muted', '0'); }
+    if (input.wasPressed('F1')) { this.soundOn = false; localStorage.setItem('packman_muted', '1'); }
+    if (input.wasPressed('F2')) { this.soundOn = true; localStorage.setItem('packman_muted', '0'); }
   }
 
   // ── PLAYING state ──────────────────────────────────────────────────────────
@@ -255,8 +256,8 @@ class Game {
     else if (input.isDown('ArrowLeft')  || input.isDown('KeyA')) this.inputDir = DIR_LEFT;
 
     // F1/F2 sound toggle
-    if (input.wasPressed('F1')) { this.soundOn = false; localStorage.setItem('packman2_muted', '1'); }
-    if (input.wasPressed('F2')) { this.soundOn = true; localStorage.setItem('packman2_muted', '0'); }
+    if (input.wasPressed('F1')) { this.soundOn = false; localStorage.setItem('packman_muted', '1'); }
+    if (input.wasPressed('F2')) { this.soundOn = true; localStorage.setItem('packman_muted', '0'); }
 
     // ESC exits to menu
     if (input.wasPressed('Escape')) { this._setState(S_MENU); return; }
@@ -273,7 +274,7 @@ class Game {
     if (this.lives < 0) {
       if (this.score > this.hiScore) {
         this.hiScore = this.score;
-        localStorage.setItem('packman2_hi', this.hiScore);
+        localStorage.setItem('packman_hi', this.hiScore);
       }
       if (this.soundOn) sound.gameOver();
       this._setState(S_GAME_OVER);
@@ -315,7 +316,7 @@ class Game {
     if (input.wasPressed('Space') || input.wasPressed('Enter') || input.wasPressed('Escape')) {
       if (this.score > this.hiScore) {
         this.hiScore = this.score;
-        localStorage.setItem('packman2_hi', this.hiScore);
+        localStorage.setItem('packman_hi', this.hiScore);
       }
       this._setState(S_MENU);
     }
@@ -337,7 +338,7 @@ class Game {
     this.score    = 0;
     this.lives    = STARTING_LIVES;
     this.levelIdx = levelIdx;
-    this.soundOn  = localStorage.getItem('packman2_muted') !== '1';
+    this.soundOn  = localStorage.getItem('packman_muted') !== '1';
     _rngSeed      = (this.tick ^ 0xABCD) >>> 0 || 0x1234;
     this._initLevel();
     this._setState(S_PLAYING);
@@ -459,7 +460,7 @@ class Game {
         // Update hi-score
         if (this.score > this.hiScore) {
           this.hiScore = this.score;
-          localStorage.setItem('packman2_hi', this.hiScore);
+          localStorage.setItem('packman_hi', this.hiScore);
         }
       }
     }
@@ -610,12 +611,12 @@ class Game {
 
   _save() {
     const data = { level: this.levelIdx, score: this.score, lives: this.lives };
-    localStorage.setItem('packman2', JSON.stringify(data));
+    localStorage.setItem('packman', JSON.stringify(data));
   }
 
   _load() {
     try {
-      const raw = localStorage.getItem('packman2');
+      const raw = localStorage.getItem('packman');
       if (!raw) return;
       const { level, score, lives } = JSON.parse(raw);
       this.score    = score || 0;

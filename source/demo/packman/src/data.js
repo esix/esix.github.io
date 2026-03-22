@@ -1,4 +1,4 @@
-// src/data.js — extracted from PACKMAN2.EXE
+// src/data.js — extracted from PACKMAN.EXE
 // DO NOT EDIT — regenerate with: node tools/extract.js
 // Sprite format: 56 bytes per tile, 14 rows × 4 bytes, 2bpp CGA
 // Grid: 20 cols × 12 rows, tile 16×14 px, screen 320×200
