@@ -22,11 +22,17 @@ const demos = [
     src: resolve(SITE_DIR, '../interactive-computer-graphics'),
     dist: resolve(SITE_DIR, '../interactive-computer-graphics/dist'),
   },
+  {
+    name: 'winweb',
+    src: resolve(SITE_DIR, '../esix-os/winweb'),
+    dist: resolve(SITE_DIR, '../esix-os/winweb/dist'),
+    env: { WINWEB_BASE: '/demo/winweb/' },   // деплой в подпапку
+  },
 ];
 
-for (const { name, src, dist } of demos) {
+for (const { name, src, dist, env } of demos) {
   console.log(`\n==> Building ${name}...`);
-  execSync('npm run build', { cwd: src, stdio: 'inherit' });
+  execSync('npm run build', { cwd: src, stdio: 'inherit', env: { ...process.env, ...env } });
 
   const dest = resolve(SITE_DIR, 'source/demo', name);
   console.log(`==> Copying ${dist} -> ${dest}`);
