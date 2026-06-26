@@ -13,7 +13,10 @@ tags:
   - mbf
 ---
 
-*Полноценный интерпретатор GW-BASIC, написанный целиком на `.bat`-файлах Windows. Без C, без Python, без единого скомпилированного бинарника — только `SET`, `CALL`, `GOTO` и `FOR /F`.*
+*Полноценный интерпретатор GW-BASIC, 
+написанный целиком на `.bat`-файлах Windows. Без C, без Python, без единого скомпилированного бинарника — только `SET`, `CALL`, `GOTO` и `FOR /F`.*
+
+{% html5video auto 250px %}/assets/gw-batsic.webm{% endhtml5video %}
 
 - [Репозиторий](https://github.com/esix/gw-batsic)
 

@@ -3,7 +3,7 @@
 Personal site built with [Hexo](https://hexo.io/) + landscape theme.
 Hosted at https://esix.github.io.
 
-Demo projects (`source/demo/`) are built automatically from their own repos via GitHub Actions.
+Demo projects (`source/demo/`) are stored as built static files. GitHub Actions can rebuild them from their own repos when a demo repo explicitly triggers a site rebuild.
 
 ---
 
@@ -47,16 +47,16 @@ npm start
 ## Deployment
 
 Pushing to `master` triggers GitHub Actions, which:
-1. Builds each demo project from its GitHub repo
-2. Copies build output into `source/demo/`
-3. Runs `hexo generate`
-4. Deploys to GitHub Pages
+1. Runs `hexo generate`
+2. Deploys to GitHub Pages
+
+When a demo repo triggers `repository_dispatch`, the workflow first rebuilds the demo projects and copies their output into `source/demo/`, then builds and deploys the site.
 
 You never need to deploy manually.
 
 ### Demo project auto-rebuild
 
-When you push to `master` in **mmheroes** or **ball-to-goal**, their CI pipeline:
+When you push to `master` in a demo repo, its CI pipeline:
 1. Builds the project (catches errors early)
 2. Triggers a rebuild of this site via `repository_dispatch`
 

@@ -32,12 +32,14 @@ jobs:
 
       # --- mmheroes ---
       - name: Checkout mmheroes
+        if: github.event_name == 'repository_dispatch'
         uses: actions/checkout@v4
         with:
           repository: esix/mmheroes
           path: _demos/mmheroes
 
       - name: Cache mmheroes dependencies
+        if: github.event_name == 'repository_dispatch'
         uses: actions/cache@v4
         with:
           path: _demos/mmheroes/node_modules
@@ -46,10 +48,12 @@ jobs:
             ${{ runner.OS }}-mmheroes-npm-cache
 
       - name: Build mmheroes
+        if: github.event_name == 'repository_dispatch'
         run: npm install && npm run build
         working-directory: _demos/mmheroes
 
       - name: Copy mmheroes dist
+        if: github.event_name == 'repository_dispatch'
         run: |
           rm -rf source/demo/mmheroes
           mkdir -p source/demo/mmheroes
@@ -57,12 +61,14 @@ jobs:
 
       # --- ball-to-goal ---
       - name: Checkout ball-to-goal
+        if: github.event_name == 'repository_dispatch'
         uses: actions/checkout@v4
         with:
           repository: esix/ball-to-goal
           path: _demos/ball-to-goal
 
       - name: Cache ball-to-goal dependencies
+        if: github.event_name == 'repository_dispatch'
         uses: actions/cache@v4
         with:
           path: _demos/ball-to-goal/node_modules
@@ -71,10 +77,12 @@ jobs:
             ${{ runner.OS }}-ball-to-goal-npm-cache
 
       - name: Build ball-to-goal
+        if: github.event_name == 'repository_dispatch'
         run: npm install && npm run build
         working-directory: _demos/ball-to-goal
 
       - name: Copy ball-to-goal dist
+        if: github.event_name == 'repository_dispatch'
         run: |
           rm -rf source/demo/ball-to-goal
           mkdir -p source/demo/ball-to-goal
@@ -82,12 +90,14 @@ jobs:
 
       # --- interactive-computer-graphics ---
       - name: Checkout interactive-computer-graphics
+        if: github.event_name == 'repository_dispatch'
         uses: actions/checkout@v4
         with:
           repository: esix/interactive-computer-graphics
           path: _demos/interactive-computer-graphics
 
       - name: Cache interactive-computer-graphics dependencies
+        if: github.event_name == 'repository_dispatch'
         uses: actions/cache@v4
         with:
           path: _demos/interactive-computer-graphics/node_modules
@@ -96,10 +106,12 @@ jobs:
             ${{ runner.OS }}-interactive-computer-graphics-npm-cache
 
       - name: Build interactive-computer-graphics
+        if: github.event_name == 'repository_dispatch'
         run: npm install && npm run build
         working-directory: _demos/interactive-computer-graphics
 
       - name: Copy interactive-computer-graphics dist
+        if: github.event_name == 'repository_dispatch'
         run: |
           rm -rf source/demo/interactive-computer-graphics
           mkdir -p source/demo/interactive-computer-graphics
