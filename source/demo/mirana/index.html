@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mirana Scratch projects</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #242424;
+      background: #f7f4ef;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+    }
+
+    main {
+      width: min(760px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 48px 0;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+      line-height: 1.15;
+      font-weight: 700;
+    }
+
+    p {
+      margin: 0 0 28px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .projects {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .project-link {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 16px 18px;
+      border: 1px solid #ded7ce;
+      border-radius: 8px;
+      background: #fff;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .project-link:hover,
+    .project-link:focus-visible {
+      border-color: #79a9a4;
+      outline: none;
+    }
+
+    .project-title {
+      font-size: 18px;
+      font-weight: 650;
+    }
+
+    .project-path {
+      color: #777;
+      font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      font-size: 13px;
+    }
+
+    .arrow {
+      color: #3d7771;
+      font-size: 22px;
+    }
+
+    @media (max-width: 560px) {
+      main {
+        width: min(100% - 24px, 760px);
+        padding: 28px 0;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+
+      .project-link {
+        grid-template-columns: 1fr;
+      }
+
+      .arrow {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Mirana Scratch projects</h1>
+    <p>Проекты, собранные через TurboWarp Packager.</p>
+
+    <ul class="projects">
+      <li>
+        <a class="project-link" href="./find-elsa/">
+          <span>
+            <span class="project-title">Как найти Эльзу</span><br>
+            <span class="project-path">find-elsa</span>
+          </span>
+          <span class="arrow">→</span>
+        </a>
+      </li>
+      <li>
+        <a class="project-link" href="./learn-hebrew-animals/">
+          <span>
+            <span class="project-title">Учим названия животных</span><br>
+            <span class="project-path">learn-hebrew-animals</span>
+          </span>
+          <span class="arrow">→</span>
+        </a>
+      </li>
+      <li>
+        <a class="project-link" href="./maze/">
+          <span>
+            <span class="project-title">Лабиринт</span><br>
+            <span class="project-path">maze</span>
+          </span>
+          <span class="arrow">→</span>
+        </a>
+      </li>
+      <li>
+        <a class="project-link" href="./catch-fish/">
+          <span>
+            <span class="project-title">Ловим рыбок</span><br>
+            <span class="project-path">catch-fish</span>
+          </span>
+          <span class="arrow">→</span>
+        </a>
+      </li>
+    </ul>
+  </main>
+</body>
+</html>
