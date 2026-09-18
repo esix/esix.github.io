@@ -1,0 +1,190 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 700" role="img" aria-labelledby="title desc">
+  <title id="title">Кодирование состояний по BFS-глубине</title>
+  <desc id="desc">Схема эвристики: состояние на глубине d получает бинарный код с d включенными битами. Для последнего слоя level0 показаны два разных 8-битных кода с семью единицами.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #fff; stroke: #cbd5e1; stroke-width: 1.5; }
+      .title { font: 700 24px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #0f172a; }
+      .subtitle { font: 15px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #475569; }
+      .axis { font: 700 14px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #334155; }
+      .state { font: 700 14px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #0f172a; }
+      .code { font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #475569; }
+      .hint { font: 14px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #334155; }
+      .small { font: 12px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #64748b; }
+      .rowline { stroke: #e2e8f0; stroke-width: 1; }
+      .bit { fill: #fff; stroke: #94a3b8; stroke-width: 1.5; }
+      .on { fill: #2563eb; stroke: #1e40af; }
+      .warn { fill: #fff7ed; stroke: #fb923c; stroke-width: 1.5; }
+      .arrow { stroke: #94a3b8; stroke-width: 2.2; stroke-linecap: round; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1040" height="700" rx="16"/>
+  <text class="title" x="40" y="48">Идея: popcount(code) = глубина</text>
+  <text class="subtitle" x="40" y="75">Каждый следующий слой BFS должен иметь на один включенный checkbox больше.</text>
+
+  <rect class="panel" x="34" y="100" width="972" height="510" rx="14"/>
+
+  <text class="axis" x="66" y="135">depth</text>
+  <text class="axis" x="150" y="135">states</text>
+  <text class="axis" x="328" y="135">пример 8-битного кода</text>
+  <text class="axis" x="720" y="135">единиц</text>
+
+  <line class="rowline" x1="52" y1="152" x2="988" y2="152"/>
+  <line class="rowline" x1="52" y1="207" x2="988" y2="207"/>
+  <line class="rowline" x1="52" y1="262" x2="988" y2="262"/>
+  <line class="rowline" x1="52" y1="317" x2="988" y2="317"/>
+  <line class="rowline" x1="52" y1="372" x2="988" y2="372"/>
+  <line class="rowline" x1="52" y1="427" x2="988" y2="427"/>
+  <line class="rowline" x1="52" y1="482" x2="988" y2="482"/>
+  <line class="rowline" x1="52" y1="537" x2="988" y2="537"/>
+
+  <g transform="translate(0 0)">
+    <text class="axis" x="78" y="185">0</text>
+    <text class="state" x="150" y="185">0</text>
+    <g transform="translate(328 164)">
+      <rect class="bit" x="0" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="38" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="76" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="114" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="152" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="190" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="228" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="266" y="0" width="30" height="30" rx="6"/>
+      <text class="code" x="0" y="48">00000000</text>
+    </g>
+    <text class="hint" x="735" y="185">0</text>
+  </g>
+
+  <g transform="translate(0 55)">
+    <text class="axis" x="78" y="185">1</text>
+    <text class="state" x="150" y="185">1, 2</text>
+    <g transform="translate(328 164)">
+      <rect class="bit" x="0" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="38" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="76" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="114" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="152" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="190" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="228" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="266" y="0" width="30" height="30" rx="6"/>
+      <text class="code" x="0" y="48">00000001 или 00000010</text>
+    </g>
+    <text class="hint" x="735" y="185">1</text>
+  </g>
+
+  <g transform="translate(0 110)">
+    <text class="axis" x="78" y="185">2</text>
+    <text class="state" x="150" y="185">3, 4, 5</text>
+    <g transform="translate(328 164)">
+      <rect class="bit" x="0" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="38" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="76" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="114" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="152" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="190" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="228" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="266" y="0" width="30" height="30" rx="6"/>
+      <text class="code" x="0" y="48">00000011, 00000101, ...</text>
+    </g>
+    <text class="hint" x="735" y="185">2</text>
+  </g>
+
+  <g transform="translate(0 165)">
+    <text class="axis" x="78" y="185">3</text>
+    <text class="state" x="150" y="185">6, 7, 8</text>
+    <g transform="translate(328 164)">
+      <rect class="bit" x="0" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="38" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="76" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="114" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="152" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="190" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="228" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="266" y="0" width="30" height="30" rx="6"/>
+      <text class="code" x="0" y="48">00000111, 00001011, ...</text>
+    </g>
+    <text class="hint" x="735" y="185">3</text>
+  </g>
+
+  <g transform="translate(0 220)">
+    <text class="axis" x="78" y="185">4</text>
+    <text class="state" x="150" y="185">9</text>
+    <g transform="translate(328 164)">
+      <rect class="bit" x="0" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="38" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="76" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="114" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="152" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="190" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="228" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="266" y="0" width="30" height="30" rx="6"/>
+      <text class="code" x="0" y="48">00001111</text>
+    </g>
+    <text class="hint" x="735" y="185">4</text>
+  </g>
+
+  <g transform="translate(0 275)">
+    <text class="axis" x="78" y="185">5</text>
+    <text class="state" x="150" y="185">10</text>
+    <g transform="translate(328 164)">
+      <rect class="bit" x="0" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="38" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="76" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="114" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="152" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="190" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="228" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="266" y="0" width="30" height="30" rx="6"/>
+      <text class="code" x="0" y="48">00011111</text>
+    </g>
+    <text class="hint" x="735" y="185">5</text>
+  </g>
+
+  <g transform="translate(0 330)">
+    <text class="axis" x="78" y="185">6</text>
+    <text class="state" x="150" y="185">11, 12</text>
+    <g transform="translate(328 164)">
+      <rect class="bit" x="0" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit" x="38" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="76" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="114" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="152" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="190" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="228" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="266" y="0" width="30" height="30" rx="6"/>
+      <text class="code" x="0" y="48">00111111 или 01011111</text>
+    </g>
+    <text class="hint" x="735" y="185">6</text>
+  </g>
+
+  <g transform="translate(0 385)">
+    <text class="axis" x="78" y="185">7</text>
+    <text class="state" x="150" y="185">13, 14</text>
+    <g transform="translate(328 164)">
+      <rect class="bit" x="0" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="38" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="76" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="114" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="152" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="190" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="228" y="0" width="30" height="30" rx="6"/>
+      <rect class="bit on" x="266" y="0" width="30" height="30" rx="6"/>
+      <text class="code" x="0" y="48">01111111 или 10111111</text>
+    </g>
+    <text class="hint" x="735" y="185">7</text>
+  </g>
+
+  <g transform="translate(810 526)">
+    <rect class="warn" width="158" height="70" rx="10"/>
+    <text class="hint" x="16" y="26">7 битов?</text>
+    <text class="small" x="16" y="48">на depth 7 только</text>
+    <text class="small" x="16" y="62">один код: 1111111</text>
+  </g>
+
+  <g transform="translate(40 642)">
+    <text class="hint" x="0" y="0">Это эвристика, а не оптимальная разметка: ручной граф выше помещается в 4 checkbox'а.</text>
+    <text class="small" x="0" y="24">Синие клетки - включенные биты; пустые - выключенные.</text>
+  </g>
+</svg>
