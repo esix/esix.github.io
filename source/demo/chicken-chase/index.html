@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Chicken Chase</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+    /* Canvas + HTML dialog overlay share one 800x600 box so they line up.
+       If the canvas is ever CSS-scaled, scale #game-wrap and the overlay
+       tracks it automatically. */
+    #game-wrap { position: relative; width: 800px; height: 600px; }
+    #gameCanvas { display: block; cursor: default; image-rendering: auto; }
+    #ui-layer { position: absolute; inset: 0; pointer-events: none; }
+  </style>
+  <script type="module" crossorigin src="/demo/chicken-chase/assets/index-CFwuxtFF.js"></script>
+  <link rel="stylesheet" crossorigin href="/demo/chicken-chase/assets/index-CgXl2NFm.css">
+</head>
+<body>
+  <div id="game-wrap">
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <!-- HTML/CSS dialog overlay. Each .cc-dialog covers the 800x600 game
+       area and acts as its own modal scrim. They are hidden by default
+       and shown by HtmlDialogs.open(name). Style everything in
+       styles/dialogs.css — this file only provides structure + hooks.
+       Hooks: data-dialog (id), data-bind (field), data-action (button),
+       data-list/data-template (repeating rows), data-visible (toggle). -->
+    <div id="ui-layer">
+
+      <!-- OPTIONS -->
+      <div class="cc-dialog" data-dialog="options" hidden>
+        <div class="cc-box cc-box-options">
+          <div class="cc-plate"><h2 class="cc-title">OPTIONS</h2></div>
+          <div class="cc-body">
+            <label class="cc-row cc-slider-row">
+              <span class="cc-label">Music</span>
+              <input class="cc-range" type="range" min="0" max="1" step="any" data-bind="music">
+            </label>
+            <label class="cc-row cc-slider-row">
+              <span class="cc-label">Sound FX</span>
+              <input class="cc-range" type="range" min="0" max="1" step="any" data-bind="sfx">
+            </label>
+            <label class="cc-row cc-check-row">
+              <input type="checkbox" data-bind="fullscreen">
+              <span class="cc-label">Fullscreen</span>
+            </label>
+            <label class="cc-row cc-check-row">
+              <input type="checkbox" data-bind="hwaccel">
+              <span class="cc-label">Hardware Acceleration</span>
+            </label>
+            <div class="cc-buttons">
+              <button class="cc-btn" data-action="restart" data-visible="ingame">RESTART LEVEL</button>
+              <button class="cc-btn" data-action="mainmenu" data-visible="ingame">MAIN MENU</button>
+              <button class="cc-btn" data-action="close">CLOSE</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUIT CONFIRM -->
+      <div class="cc-dialog" data-dialog="quit-confirm" hidden>
+        <div class="cc-box cc-box-quit">
+          <div class="cc-plate"><h2 class="cc-title">QUIT?</h2></div>
+          <div class="cc-body">
+            <p class="cc-text">Your level progress will be lost. Continue?</p>
+            <div class="cc-buttons cc-buttons-row">
+              <button class="cc-btn" data-action="yes">YES</button>
+              <button class="cc-btn" data-action="no">NO</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DELETE USER — ChangePlayerDialog DELETE, FUN_00402ee5 rwg:3041-3044:
+           header "QUESTION", text "Delete user?", same YES/NO builder
+           FUN_0040279c as QUIT? (so the same classes). -->
+      <div class="cc-dialog" data-dialog="delete-user" hidden>
+        <div class="cc-box cc-box-quit">
+          <div class="cc-plate"><h2 class="cc-title">QUESTION</h2></div>
+          <div class="cc-body">
+            <p class="cc-text">Delete user?</p>
+            <div class="cc-buttons cc-buttons-row">
+              <button class="cc-btn" data-action="yes">YES</button>
+              <button class="cc-btn" data-action="no">NO</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SURPRISE! prompt — FUN_0041b94a rwg:33711-33716 via the same
+           YES/NO builder FUN_0040279c as QUIT? (screenshot 32). -->
+      <div class="cc-dialog" data-dialog="surprise-ask" hidden>
+        <div class="cc-box cc-box-quit cc-box-surprise">
+          <div class="cc-plate"><h2 class="cc-title">SURPRISE!</h2></div>
+          <div class="cc-body">
+            <p class="cc-text">Do you feel clucky?</p>
+            <div class="cc-buttons cc-buttons-row">
+              <button class="cc-btn" data-action="yes">YES</button>
+              <button class="cc-btn" data-action="no">NO</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SURPRISE! result — FUN_0041ba27 rwg:33817-33826 via the OK-only
+           builder FUN_0040f491 (rwg:19014 "OK"); body = RiskCase+4 string
+           (DAT_004decf4..DAT_004dee30, the block just before "SURPRISE!"). -->
+      <div class="cc-dialog" data-dialog="surprise-result" hidden>
+        <div class="cc-box cc-box-quit cc-box-surprise">
+          <div class="cc-plate"><h2 class="cc-title">SURPRISE!</h2></div>
+          <div class="cc-body">
+            <!-- One template per RiskCase (RiskController.js mKey); SurpriseDialog.js
+                 unhides the rolled one and puts the case's mValue into [data-value]
+                 (the %i of the original sprintf, or the appended item name). -->
+            <!-- RiskCaseOffensive FUN_0041aeaf: DAT_004decf4 + itemName (0x500480 + item*0x1c) -->
+            <p class="cc-text" data-risk-case="Offensive" hidden>You've earned a free upgrade: <span data-value></span></p>
+            <!-- RiskCasePlusMoney FUN_0041afd1: DAT_004ded14 -->
+            <p class="cc-text" data-risk-case="PlusMoney" hidden>Congratulations! You won a bet of $ <span data-value></span>!</p>
+            <!-- RiskCaseStealChickens FUN_0041b0f3: DAT_004ded3c -->
+            <p class="cc-text" data-risk-case="StealChickens" hidden>Someone has stolen <span data-value></span> of your chickens!</p>
+            <!-- RiskCaseMinusMoney FUN_0041b3ae: DAT_004ded64 -->
+            <p class="cc-text" data-risk-case="MinusMoney" hidden>You lost <span data-value></span> dollars.</p>
+            <!-- RiskCaseNothing FUN_0041b569 rwg:33457: DAT_004ded7c -->
+            <p class="cc-text" data-risk-case="Nothing" hidden>Nothing happens...</p>
+            <!-- RiskCasePlusTime FUN_0041b569 rwg:33499: DAT_004ded90 -->
+            <p class="cc-text" data-risk-case="PlusTime" hidden>Your watch was fast! You have 30 more seconds!</p>
+            <!-- RiskCaseRavensScared FUN_0041b569 rwg:33517: DAT_004dedc0 -->
+            <p class="cc-text" data-risk-case="RavensScared" hidden>Your new scarecrow has frightened away all of the ravens for a few minutes.</p>
+            <!-- RiskCaseChickFlu FUN_0041b569 rwg:33563: DAT_004dee0c -->
+            <p class="cc-text" data-risk-case="ChickFlu" hidden>An epidemic of the flu has begun!</p>
+            <!-- RiskCaseRavensAttack FUN_0041b569 rwg:33579: DAT_004dee30 -->
+            <p class="cc-text" data-risk-case="RavensAttack" hidden>Acht! They are back!</p>
+            <div class="cc-buttons"><button class="cc-btn" data-action="ok">OK</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEW PLAYER -->
+      <div class="cc-dialog" data-dialog="new-player" hidden>
+        <div class="cc-box cc-box-newplayer">
+          <div class="cc-plate">
+            <h2 class="cc-title">NEW PLAYER</h2>
+          </div>
+          <div class="cc-body">
+            <input class="cc-input" type="text" maxlength="15" data-bind="name" data-autofocus aria-label="Player name" autocomplete="off" spellcheck="false">
+            <p class="cc-error" data-bind="error"></p>
+            <div class="cc-buttons cc-buttons-row">
+              <button class="cc-btn" data-action="ok">OK</button>
+              <button class="cc-btn" data-action="cancel" data-visible="cancel">CANCEL</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WHO ARE YOU? (change player) -->
+      <div class="cc-dialog" data-dialog="change-player" hidden>
+        <div class="cc-box cc-box-changeplayer">
+          <div class="cc-plate"><h2 class="cc-title">WHO ARE YOU?</h2></div>
+          <div class="cc-body">
+            <ul class="cc-list cc-selection-list" data-list="players">
+              <li class="cc-list-item" data-template data-action="select" hidden>
+                <span data-bind="name"></span>
+              </li>
+            </ul>
+            <div class="cc-buttons">
+              <div class="cc-buttons-row">
+                <button class="cc-btn" data-action="new">NEW</button>
+                <button class="cc-btn" data-action="delete">DELETE</button>
+              </div>
+              <button class="cc-btn" data-action="ok">OK</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HINT -->
+      <div class="cc-dialog" data-dialog="hint" hidden>
+        <div class="cc-box cc-box-hint">
+          <div class="cc-plate"><h2 class="cc-title">HINT</h2></div>
+          <div class="cc-body">
+            <p class="cc-text" data-bind="text"></p>
+            <label class="cc-check-row cc-dontshow">
+              <input type="checkbox" data-bind="dontshow">
+              <span class="cc-label">Don't show</span>
+            </label>
+            <div class="cc-buttons"><button class="cc-btn" data-action="ok">OK</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SELECT UPGRADE -->
+      <div class="cc-dialog" data-dialog="upgrade" hidden>
+        <div class="cc-box cc-box-upgrade">
+          <div class="cc-plate"><h2 class="cc-title">SELECT UPGRADE</h2></div>
+          <div class="cc-body">
+            <p class="cc-text" data-bind="desc"></p>
+            <ul class="cc-slots" data-list="options">
+              <li data-template hidden>
+                <button class="cc-slot" type="button" data-action="select">
+                  <img class="cc-slot-icon" alt="">
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- SHOP (sell) -->
+      <div class="cc-dialog" data-dialog="shop-sell" hidden>
+        <div class="cc-box cc-box-shop cc-box-shopsell">
+          <div class="cc-plate"><h2 class="cc-title">SHOP</h2></div>
+          <div class="cc-body">
+            <div class="cc-pager">
+              <button class="cc-nav cc-prev" data-action="prev" aria-label="Previous page"></button>
+              <span class="cc-page" data-bind="page"></span>
+              <button class="cc-nav cc-next" data-action="next" aria-label="Next page"></button>
+            </div>
+            <div class="cc-shop-head"><span>AGE</span><span>PRICE</span></div>
+            <ul class="cc-list" data-list="rows">
+              <li class="cc-shop-row" data-template hidden>
+                <!-- FUN_0041f65c: chick sprite at scale 0.5 (FUN_0041742b), no type name -->
+                <span class="cc-cell-type"><img class="cc-cell-icon" alt=""></span>
+                <span class="cc-cell-age"></span>
+                <span class="cc-cell-price"></span>
+                <button class="cc-btn cc-btn-sell" data-action="sell">SELL</button>
+              </li>
+            </ul>
+            <div class="cc-buttons"><button class="cc-btn" data-action="ok">OK</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPECIAL SHOP (buy) -->
+      <div class="cc-dialog" data-dialog="shop-buy" hidden>
+        <div class="cc-box cc-box-shop cc-box-shopbuy">
+          <div class="cc-plate"><h2 class="cc-title">SPECIAL SHOP</h2></div>
+          <div class="cc-body">
+            <div class="cc-pager">
+              <button class="cc-nav cc-prev" data-action="prev" aria-label="Previous page"></button>
+              <span class="cc-page" data-bind="page"></span>
+              <button class="cc-nav cc-next" data-action="next" aria-label="Next page"></button>
+            </div>
+            <ul class="cc-list" data-list="rows">
+              <li class="cc-buy-row" data-template hidden>
+                <img class="cc-buy-icon" alt="">
+                <span class="cc-buy-name"></span>
+                <span class="cc-buy-price"></span>
+                <button class="cc-btn cc-btn-buy" data-action="buy">BUY</button>
+              </li>
+            </ul>
+            <div class="cc-buttons"><button class="cc-btn" data-action="ok">OK</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INFORMATION — FUN_0041efda (rwg:38450) / FUN_004201bd (rwg:39718):
+           OK-only DoDialog FUN_00421187 (same builder as QUIT?), header
+           "INFORMATION", body = message. Opened by ShopDialogs.js. -->
+      <div class="cc-dialog" data-dialog="information" hidden>
+        <div class="cc-box cc-box-quit">
+          <div class="cc-plate"><h2 class="cc-title">INFORMATION</h2></div>
+          <div class="cc-body">
+            <p class="cc-text" data-bind="text"></p>
+            <div class="cc-buttons"><button class="cc-btn" data-action="ok">OK</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEVEL COMPLETED -->
+      <div class="cc-dialog" data-dialog="level-complete" hidden>
+        <div class="cc-box cc-box-complete">
+          <div class="cc-plate"><h2 class="cc-title" data-bind="title">LEVEL COMPLETED</h2></div>
+          <div class="cc-body">
+            <div class="cc-times" data-visible="times">
+              <div class="cc-time-row"><span class="cc-label">Your time</span><span data-bind="yourtime"></span></div>
+              <div class="cc-time-row"><span class="cc-label">Ace time</span><span data-bind="acetime"></span></div>
+              <div class="cc-time-row"><span class="cc-label" data-bind="bestlabel">Best time</span><span data-bind="besttime"></span></div>
+            </div>
+            <p class="cc-text" data-bind="bonus" data-visible="bonus"></p>
+            <div class="cc-buttons"><button class="cc-btn" data-action="continue">CONTINUE</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEVEL FAILED -->
+      <div class="cc-dialog" data-dialog="level-failed" hidden>
+        <div class="cc-box cc-box-failed">
+          <div class="cc-plate"><h2 class="cc-title">LEVEL FAILED</h2></div>
+          <div class="cc-body">
+            <p class="cc-text" data-bind="reason"></p>
+            <div class="cc-buttons cc-buttons-row">
+              <button class="cc-btn" data-action="restart">RESTART LEVEL</button>
+              <button class="cc-btn" data-action="mainmenu">MAIN MENU</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INTRODUCTION — letter page -->
+      <div class="cc-dialog" data-dialog="intro-letter" hidden>
+        <div class="cc-box cc-box-introletter">
+          <div class="cc-plate" aria-hidden="true"></div>
+          <div class="cc-body">
+            <p class="cc-text cc-intro-caption">One day, you receive a letter from your grandparents</p>
+            <img class="cc-letter-img" src="/demo/chicken-chase/assets/letter-B-PdcxDu.png" alt="Letter from grandparents">
+            <div class="cc-buttons"><button class="cc-btn" data-action="next">OK</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INTRODUCTION — original illustrated panel inside the shared frame -->
+      <div class="cc-dialog cc-dialog-bare" data-dialog="intro-panel" hidden>
+        <div class="cc-box cc-box-intropanel">
+          <img class="cc-intro-img" src="images/Introduction.jpg" alt="Introduction">
+          <div class="cc-buttons"><button class="cc-btn" data-action="ok">OK</button></div>
+        </div>
+      </div>
+
+      <!-- SELECT LEVEL (overlays the main-menu background) -->
+      <div class="cc-dialog cc-dialog-bare" data-dialog="select-level" hidden>
+        <div class="cc-box cc-box-selectlevel">
+          <div class="cc-plate"><h2 class="cc-title" data-bind="level">LEVEL 1</h2></div>
+          <div class="cc-body">
+            <p class="cc-text cc-desc" data-bind="desc"></p>
+            <ul class="cc-bullets" data-list="bullets">
+              <li class="cc-bullet" data-template hidden>
+                <span class="cc-bullet-art"><img class="cc-bullet-icon" alt=""><span class="cc-bullet-value"></span></span>
+                <span class="cc-text cc-bullet-text"></span>
+              </li>
+            </ul>
+            <div class="cc-pager cc-level-nav">
+              <button class="cc-nav cc-prev" data-action="prev" aria-label="Previous level"></button>
+              <input class="cc-range" type="range" min="1" max="50" step="1" data-bind="selectedlevel" aria-label="Level">
+              <button class="cc-nav cc-next" data-action="next" aria-label="Next level"></button>
+            </div>
+            <div class="cc-buttons"><button class="cc-btn cc-btn-start" data-action="start">START LEVEL</button></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
